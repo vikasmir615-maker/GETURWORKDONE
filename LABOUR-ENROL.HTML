@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Labour Enrolment – GetUrWorkDone</title>
+</head>
+<body>
+
+<h2>Labour Enrolment Form</h2>
+
+<form onsubmit="event.preventDefault(); submitLabour();">
+
+  <input id="name" placeholder="Full Name" required><br><br>
+
+  <select id="skill" required>
+    <option value="">Select Skill</option>
+    <option>Mason</option>
+    <option>Plumber</option>
+    <option>Electrician</option>
+    <option>Carpenter</option>
+  </select><br><br>
+
+  <input id="area" placeholder="Area" required><br><br>
+  <input id="mobile" placeholder="Mobile Number" required><br><br>
+  <input id="experience" placeholder="Experience (years)" required><br><br>
+
+  <button type="submit">Enroll</button>
+</form>
+
+<script>
+function submitLabour() {
+
+  const labourData = {
+    type: "labour",
+    name: document.getElementById("name").value,
+    skill: document.getElementById("skill").value,
+    area: document.getElementById("area").value,
+    mobile: document.getElementById("mobile").value,
+    experience: document.getElementById("experience").value
+  };
+
+  fetch("https://script.google.com/macros/s/AKfycbxO9ZzVDZK3dCU8qz1xJJHHc-9AhO36j3tRygUsHYl6KKHau4x4kZLNqRUFfr2K6vC9/exec", {
+    method: "POST",
+    mode: "no-cors",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(labourData)
+  })
+  .then(() => {
+    alert("Labour enrolled successfully!");
+    document.querySelector("form").reset();
+  });
+}
+</script>
+
+</body>
+</html>
+
+

@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>GetUrWorkDone | Admin Panel</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #0f0f0f;
+      color: #fff;
+    }
+
+    header {
+      background: #000;
+      padding: 15px;
+      text-align: center;
+      font-size: 22px;
+      font-weight: bold;
+      border-bottom: 2px solid #f5c518;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+
+    th, td {
+      padding: 12px;
+      border: 1px solid #333;
+      text-align: center;
+    }
+
+    th {
+      background: #1a1a1a;
+      color: #f5c518;
+    }
+
+    select {
+      background: #1a1a1a;
+      color: #fff;
+      border: 1px solid #333;
+      padding: 6px;
+    }
+
+    .container {
+      padding: 15px;
+      overflow-x: auto;
+    }
+  </style>
+</head>
+
+<body>
+
+<header>
+  GetUrWorkDone – Admin Panel
+</header>
+
+<div class="container">
+  <table>
+    <thead>
+      <tr>
+        <th>Category</th>
+        <th>Date</th>
+        <th>Days</th>
+        <th>Area</th>
+        <th>Customer</th>
+        <th>Mobile</th>
+        <th>Status</th>
+      </tr>
+    </thead>
+
+    <tbody id="bookingTable">
+      <!-- bookings will appear here -->
+    </tbody>
+  </table>
+</div>
+<!--
+<script>
+  // TEMP SAMPLE DATA (later comes from Firebase)
+  const bookings = [
+    {
+      category: "Plumber",
+      date: "2025-01-10",
+      days: 1,
+      area: "Bemina",
+      name: "Aamir",
+      mobile: "6001234567",
+      status: "Pending"
+    }
+  ];
+
+  const table = document.getElementById("bookingTable");
+
+  bookings.forEach((b, index) => {
+    const row = document.createElement("tr");
+
+    row.innerHTML = `
+      <td>${b.category}</td>
+      <td>${b.date}</td>
+      <td>${b.days}</td>
+      <td>${b.area}</td>
+      <td>${b.name}</td>
+      <td>${b.mobile}</td>
+      <td>
+        <select onchange="updateStatus(${index}, this.value)">
+          <option ${b.status === "Pending" ? "selected" : ""}>Pending</option>
+          <option ${b.status === "Confirmed" ? "selected" : ""}>Confirmed</option>
+          <option ${b.status === "Completed" ? "selected" : ""}>Completed</option>
+        </select>
+      </td>
+    `;
+
+    table.appendChild(row);
+  });
+
+  function updateStatus(index, value) {
+    bookings[index].status = value;
+    alert("Status updated to: " + value);
+    // later this updates Firebase
+  }
+</script>-->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+
+<script>
+  // 🔴 PASTE YOUR FIREBASE CONFIG HERE
+  const firebaseConfig = {
+    apiKey: "YOUR_API_KEY",
+    authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
+    projectId: "YOUR_PROJECT_ID",
+    storageBucket: "YOUR_PROJECT_ID.appspot.com",
+    messagingSenderId: "XXXX",
+    appId: "XXXX"
+  };
+
+  firebase.initializeApp(firebaseConfig);
+  const db = firebase.firestore();
+
+  const table = document.getElementById("bookingTable");
+
+  db.collection("bookings").orderBy("date").onSnapshot(snapshot => {
+    table.innerHTML = "";
+
+    snapshot.forEach(doc => {
+      const b = doc.data();
+      const row = document.createElement("tr");
+
+      row.innerHTML = `
+        <td>${b.category}</td>
+        <td>${b.date}</td>
+        <td>${b.days}</td>
+        <td>${b.area}</td>
+        <td>${b.name}</td>
+        <td>${b.mobile}</td>
+        <td>
+          <select onchange="updateStatus('${doc.id}', this.value)">
+            <option ${b.status === "Pending" ? "selected" : ""}>Pending</option>
+            <option ${b.status === "Confirmed" ? "selected" : ""}>Confirmed</option>
+            <option ${b.status === "Completed" ? "selected" : ""}>Completed</option>
+          </select>
+        </td>
+      `;
+
+      table.appendChild(row);
+    });
+  });
+
+  function updateStatus(id, status) {
+    db.collection("bookings").doc(id).update({
+      status: status
+    }).then(() => {
+      alert("Status updated");
+    });
+  }
+</script>
+<a href="index.html">Home</a>
+
+</body>
+</html>

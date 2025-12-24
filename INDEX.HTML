@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>GetUrWorkDone | Book Labour</title>
+
+  <style>
+    body {
+      background: #000;
+      color: #fff;
+      font-family: Arial, sans-serif;
+      padding: 20px;
+    }
+
+    h1 {
+      text-align: center;
+    }
+
+    form {
+      max-width: 400px;
+      margin: auto;
+      background: #111;
+      padding: 20px;
+      border-radius: 8px;
+    }
+
+    input, button {
+      width: 100%;
+      padding: 10px;
+      margin: 8px 0;
+      border-radius: 5px;
+      border: none;
+    }
+
+    input {
+      background: #222;
+      color: #fff;
+    }
+
+    button {
+      background: #0f62fe;
+      color: #fff;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #0353e9;
+    }
+  </style>
+</head>
+
+<body>
+
+  <h1>GetUrWorkDone</h1>
+  <p style="text-align:center;">Book Skilled Labour in Srinagar</p>
+
+  <!-- BOOKING FORM -->
+  <form id="bookingForm" onsubmit="event.preventDefault(); submitBooking();">
+
+    <input id="category" placeholder="Labour Type (Plumber / Electrician)" required>
+    <input id="date" type="date" required>
+    <input id="days" placeholder="Number of Days" required>
+    <input id="area" placeholder="Area (Bemina, Batamaloo etc)">
+    <input id="name" placeholder="Your Name" required>
+    <input id="mobile" placeholder="Mobile Number" required>
+
+    <button type="submit">Book Now</button>
+  </form>
+
+  <!-- SCRIPT -->
+  <script>
+    function submitBooking() {
+    
+      const bookingData = {
+        category: document.getElementById("category").value,
+        date: document.getElementById("date").value,
+        days: document.getElementById("days").value,
+        area: document.getElementById("area").value,
+        name: document.getElementById("name").value,
+        mobile: document.getElementById("mobile").value
+      };
+    
+      fetch("https://script.google.com/macros/s/AKfycbw2MYHa0hELAzEFg5femv4guydDcBvhssmyMywQEDxsyjReTFVf9QGOltId1OUuplRU/exec", {
+        method: "POST",
+        mode: "no-cors",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(bookingData)
+      })
+      .then(() => {
+        alert("Booking submitted successfully!");
+        document.getElementById("bookingForm").reset();
+      });
+    }
+    </script>
+</body>
+</html>
